@@ -1,4 +1,6 @@
-# RateMe My Friend
+# RateMe My Friend 
+
+[![](https://jitpack.io/v/xputnikx/rateme.svg)](https://jitpack.io/#xputnikx/rateme)
 
 A Kotlin Multiplatform library for prompting users to rate your app. Provides a customizable star rating card that routes positive ratings (4-5 stars) to native app store reviews and negative ratings (1-3 stars) to email feedback.
 
