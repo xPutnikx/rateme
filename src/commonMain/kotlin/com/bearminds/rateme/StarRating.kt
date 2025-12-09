@@ -26,9 +26,9 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.mutableIntStateOf
-import audiobookify.rateme.generated.resources.Res
-import audiobookify.rateme.generated.resources.star_fill
-import audiobookify.rateme.generated.resources.star_line
+import com.bearminds.rateme.generated.resources.Res
+import com.bearminds.rateme.generated.resources.star_fill
+import com.bearminds.rateme.generated.resources.star_line
 import org.jetbrains.compose.resources.vectorResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import androidx.compose.material3.Icon
