@@ -25,9 +25,22 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.background
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.ui.text.TextStyle
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.koinInject
+
+/**
+ * Style configuration for buttons in RateMeCard.
+ *
+ * @param textColor Color for the button text. If null, uses theme's primary color.
+ * @param textStyle Text style for the button. If null, uses default button text style.
+ */
+data class ButtonStyle(
+    val textColor: Color? = null,
+    val textStyle: TextStyle? = null
+)
 
 /**
  * Internal state for the RateMeCard flow.
@@ -61,6 +74,8 @@ private enum class RateMeCardState {
  * @param okButtonText Text for the OK button in thank you view
  * @param inactiveStyle Style for stars when no rating is selected
  * @param activeStyle Style for stars when a rating is selected
+ * @param dismissButtonStyle Style for the dismiss button. If null, uses theme defaults.
+ * @param okButtonStyle Style for the OK button in thank you view. If null, uses theme defaults.
  */
 @Composable
 fun RateMeCard(
@@ -83,7 +98,9 @@ fun RateMeCard(
         starSize = 40.dp,
         borderColor = Color(0xFFFFD700),
         backgroundColor = Color.Transparent
-    )
+    ),
+    dismissButtonStyle: ButtonStyle? = null,
+    okButtonStyle: ButtonStyle? = null
 ) {
     val reviewService: ReviewService = koinInject()
     val emailService: EmailService = koinInject()
@@ -146,7 +163,8 @@ fun RateMeCard(
                             cardState = RateMeCardState.COMPLETED
                         },
                         inactiveStyle = inactiveStyle,
-                        activeStyle = activeStyle
+                        activeStyle = activeStyle,
+                        buttonStyle = dismissButtonStyle
                     )
                 }
 
@@ -157,7 +175,8 @@ fun RateMeCard(
                         okButtonText = okButtonText,
                         onDismiss = {
                             cardState = RateMeCardState.COMPLETED
-                        }
+                        },
+                        buttonStyle = okButtonStyle
                     )
                 }
 
@@ -178,7 +197,8 @@ private fun RatingContent(
     dismissButtonText: String,
     onDismiss: () -> Unit,
     inactiveStyle: StarStyle,
-    activeStyle: StarStyle
+    activeStyle: StarStyle,
+    buttonStyle: ButtonStyle?
 ) {
     Spacer(modifier = Modifier.height(16.dp))
 
@@ -213,8 +233,18 @@ private fun RatingContent(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.End
     ) {
-        TextButton(onClick = onDismiss) {
-            Text(text = dismissButtonText)
+        TextButton(
+            onClick = onDismiss,
+            colors = if (buttonStyle?.textColor != null) {
+                ButtonDefaults.textButtonColors(contentColor = buttonStyle.textColor)
+            } else {
+                ButtonDefaults.textButtonColors()
+            }
+        ) {
+            Text(
+                text = dismissButtonText,
+                style = buttonStyle?.textStyle ?: MaterialTheme.typography.labelLarge
+            )
         }
     }
 }
@@ -224,7 +254,8 @@ private fun ThankYouContent(
     title: String,
     description: String,
     okButtonText: String,
-    onDismiss: () -> Unit
+    onDismiss: () -> Unit,
+    buttonStyle: ButtonStyle?
 ) {
     Text(
         text = title,
@@ -243,8 +274,18 @@ private fun ThankYouContent(
 
     Spacer(modifier = Modifier.height(16.dp))
 
-    TextButton(onClick = onDismiss) {
-        Text(text = okButtonText)
+    TextButton(
+        onClick = onDismiss,
+        colors = if (buttonStyle?.textColor != null) {
+            ButtonDefaults.textButtonColors(contentColor = buttonStyle.textColor)
+        } else {
+            ButtonDefaults.textButtonColors()
+        }
+    ) {
+        Text(
+            text = okButtonText,
+            style = buttonStyle?.textStyle ?: MaterialTheme.typography.labelLarge
+        )
     }
 }
 
@@ -328,7 +369,8 @@ private fun RatingContent_NoSelection_Preview() {
                         starSize = 40.dp,
                         borderColor = Color(0xFFFFD700),
                         backgroundColor = Color.Transparent
-                    )
+                    ),
+                    buttonStyle = null
                 )
             }
         }
@@ -369,7 +411,8 @@ private fun RatingContent_PartialSelection_Preview() {
                         starSize = 40.dp,
                         borderColor = Color(0xFFFFD700),
                         backgroundColor = Color.Transparent
-                    )
+                    ),
+                    buttonStyle = null
                 )
             }
         }
@@ -410,7 +453,8 @@ private fun RatingContent_FullSelection_Preview() {
                         starSize = 40.dp,
                         borderColor = Color(0xFFFFD700),
                         backgroundColor = Color.Transparent
-                    )
+                    ),
+                    buttonStyle = null
                 )
             }
         }
@@ -437,7 +481,8 @@ private fun ThankYouContent_Preview() {
                     title = "Thank you!",
                     description = "We appreciate your support!",
                     okButtonText = "OK",
-                    onDismiss = {}
+                    onDismiss = {},
+                    buttonStyle = null
                 )
             }
         }
