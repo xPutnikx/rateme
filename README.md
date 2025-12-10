@@ -46,6 +46,27 @@ Add the dependency:
 implementation(project(":rateme"))
 ```
 
+### Required Version Catalog Entries
+
+When included as a submodule, rateme uses your project's `gradle/libs.versions.toml`. Add these entries:
+
+```toml
+[versions]
+kotlin = "2.2.20"
+coroutines = "1.10.2"
+koin = "4.1.1"
+playReview = "2.0.2"
+
+[libraries]
+kotlin-stdlib = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib", version.ref = "kotlin" }
+kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
+kotlinx-coroutines-play-services = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-play-services", version.ref = "coroutines" }
+koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin" }
+koin-android = { module = "io.insert-koin:koin-android", version.ref = "koin" }
+koin-compose = { module = "io.insert-koin:koin-compose", version.ref = "koin" }
+play-review-ktx = { module = "com.google.android.play:review-ktx", version.ref = "playReview" }
+```
+
 ## Setup
 
 ### 1. Register the Koin Module

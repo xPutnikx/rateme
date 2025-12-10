@@ -60,12 +60,6 @@ kotlin {
             }
         }
 
-        commonTest {
-            dependencies {
-                implementation(libs.kotlin.test)
-            }
-        }
-
         androidMain {
             dependencies {
                 // Google Play In-App Review
@@ -76,14 +70,6 @@ kotlin {
 
                 // Koin Android
                 implementation(libs.koin.android)
-            }
-        }
-
-        androidUnitTest {
-            dependencies {
-                implementation(libs.androidx.runner)
-                implementation(libs.androidx.core)
-                implementation(libs.androidx.junit)
             }
         }
 
