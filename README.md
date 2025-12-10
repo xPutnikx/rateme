@@ -1,6 +1,4 @@
-# RateMe My Friend 
-
-[![](https://jitpack.io/v/xputnikx/rateme.svg)](https://jitpack.io/#xputnikx/rateme)
+# RateMe My Friend
 
 A Kotlin Multiplatform library for prompting users to rate your app. Provides a customizable star rating card that routes positive ratings (4-5 stars) to native app store reviews and negative ratings (1-3 stars) to email feedback.
 
@@ -14,51 +12,29 @@ A Kotlin Multiplatform library for prompting users to rate your app. Provides a 
 
 ## Installation
 
-### Option 1: JitPack (Recommended)
+### Option 1: Git Submodule (Recommended)
 
-Add JitPack repository to your `settings.gradle.kts`:
-
-```kotlin
-dependencyResolutionManagement {
-    repositories {
-        // ... other repositories
-        maven("https://jitpack.io")
-    }
-}
-```
-
-Add the dependency in your app module's `build.gradle.kts`:
-
-```kotlin
-// Common
-implementation("com.github.xputnikx:rateme:0.5.0")
-```
-
-### Option 2: Local Maven Repository
-
-Publish to local maven for testing:
+Add as a git submodule:
 
 ```bash
-./gradlew :rateme:publishAllPublicationsToLocalRepository
+git submodule add https://github.com/xPutnikx/rateme.git rateme
 ```
 
-Then add the local repository and dependency:
+Add to your `settings.gradle.kts`:
 
 ```kotlin
-// settings.gradle.kts
-dependencyResolutionManagement {
-    repositories {
-        maven(rootProject.projectDir.resolve("rateme/build/repo"))
-    }
-}
-
-// build.gradle.kts
-implementation("com.bearminds:rateme:0.5.0")
+include(":rateme")
 ```
 
-### Option 3: Include as Module
+Add the dependency in your app module:
 
-Add the module to your project's `settings.gradle.kts`:
+```kotlin
+implementation(project(":rateme"))
+```
+
+### Option 2: Copy Module
+
+Copy the `rateme` directory into your project and add to `settings.gradle.kts`:
 
 ```kotlin
 include(":rateme")
@@ -315,36 +291,6 @@ Sealed interface for review request outcomes:
     RATED_NEGATIVE) (status:
                     RATED_POSITIVE)
 ```
-
-## Publishing
-
-### Publish to Local Maven
-
-```bash
-./gradlew :rateme:publishAllPublicationsToLocalRepository
-```
-
-Artifacts will be in `rateme/build/repo/`.
-
-### Publish to JitPack (Recommended)
-
-1. Create a GitHub repo (e.g., `github.com/xputnikx/rateme`)
-2. Push the code
-3. Create a release tag:
-   ```bash
-   git tag 0.5.0
-   git push origin 0.5.0
-   ```
-4. JitPack builds automatically - check status at `https://jitpack.io/#xputnikx/rateme`
-
-Consumers can then use:
-```kotlin
-implementation("com.github.xputnikx:rateme:0.5.0")
-```
-
-### Publish to Maven Central
-
-Requires additional setup (signing, Sonatype account). See [publishing to Maven Central](https://central.sonatype.org/publish/publish-guide/).
 
 ## License
 

@@ -7,10 +7,7 @@ plugins {
 }
 
 group = "com.bearminds"
-version = "0.5.1"
-
-// Detect if running on macOS (required for iOS targets)
-val isMacOS = System.getProperty("os.name").lowercase().contains("mac")
+version = "0.5.2"
 
 kotlin {
 
@@ -20,28 +17,24 @@ kotlin {
 
     androidTarget()
 
-    // Only configure iOS targets on macOS
-    // JitPack runs on Linux and can't build iOS artifacts
-    if (isMacOS) {
-        sourceSets {
-            named { it.lowercase().startsWith("ios") }.configureEach {
-                languageSettings {
-                    optIn("kotlinx.cinterop.ExperimentalForeignApi")
-                }
+    sourceSets {
+        named { it.lowercase().startsWith("ios") }.configureEach {
+            languageSettings {
+                optIn("kotlinx.cinterop.ExperimentalForeignApi")
             }
         }
+    }
 
-        val xcfName = "ratemeKit"
+    val xcfName = "ratemeKit"
 
-        listOf(
-            iosArm64(),
-            iosX64(),
-            iosSimulatorArm64(),
-        ).forEach {
-            it.binaries.framework {
-                baseName = xcfName
-                isStatic = true
-            }
+    listOf(
+        iosArm64(),
+        iosX64(),
+        iosSimulatorArm64(),
+    ).forEach {
+        it.binaries.framework {
+            baseName = xcfName
+            isStatic = true
         }
     }
 
@@ -94,11 +87,9 @@ kotlin {
             }
         }
 
-        if (isMacOS) {
-            iosMain {
-                dependencies {
-                    // Uses native StoreKit - no additional dependencies
-                }
+        iosMain {
+            dependencies {
+                // Uses native StoreKit - no additional dependencies
             }
         }
 
