@@ -9,6 +9,9 @@ class IosRateMePreferences : RateMePreferences {
 
     private val defaults = NSUserDefaults.standardUserDefaults
 
+    // In-memory pending trigger (doesn't need to survive app restart)
+    private var pendingTrigger: String? = null
+
     override suspend fun getStatus(): RateMeStatus {
         val value = defaults.stringForKey(KEY_STATUS)
         return if (value != null) {
@@ -28,6 +31,16 @@ class IosRateMePreferences : RateMePreferences {
 
     override suspend fun shouldShowRateMe(): Boolean {
         return getStatus() == RateMeStatus.NOT_SHOWN
+    }
+
+    override fun setPendingTrigger(trigger: String) {
+        pendingTrigger = trigger
+    }
+
+    override fun consumePendingTrigger(): String? {
+        val trigger = pendingTrigger
+        pendingTrigger = null
+        return trigger
     }
 
     companion object {

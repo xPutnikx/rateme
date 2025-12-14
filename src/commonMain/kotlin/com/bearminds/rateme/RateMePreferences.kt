@@ -41,4 +41,16 @@ interface RateMePreferences {
      * Returns true only if user hasn't already rated or dismissed.
      */
     suspend fun shouldShowRateMe(): Boolean
+
+    /**
+     * Set a pending trigger to show rate-me dialog on next screen.
+     * Used to show dialog after navigating back from another screen.
+     */
+    fun setPendingTrigger(trigger: String)
+
+    /**
+     * Get and clear the pending trigger if any.
+     * Returns the trigger string or null if none pending.
+     */
+    fun consumePendingTrigger(): String?
 }
