@@ -18,7 +18,10 @@ kotlin {
     androidTarget()
 
     sourceSets {
-        named { it.lowercase().startsWith("ios") }.configureEach {
+        // Enable ExperimentalForeignApi for all Apple platforms
+        named {
+            it.lowercase().let { n -> n.startsWith("ios") || n.startsWith("macos") }
+        }.configureEach {
             languageSettings {
                 optIn("kotlinx.cinterop.ExperimentalForeignApi")
             }
@@ -27,10 +30,22 @@ kotlin {
 
     val xcfName = "ratemeKit"
 
+    // iOS targets
     listOf(
         iosArm64(),
         iosX64(),
         iosSimulatorArm64(),
+    ).forEach {
+        it.binaries.framework {
+            baseName = xcfName
+            isStatic = true
+        }
+    }
+
+    // macOS targets
+    listOf(
+        macosArm64(),
+        macosX64(),
     ).forEach {
         it.binaries.framework {
             baseName = xcfName
@@ -73,17 +88,26 @@ kotlin {
             }
         }
 
-        iosMain {
-            dependencies {
-                // Uses native StoreKit - no additional dependencies
-            }
+        // iOS source set - explicit dependency setup for proper hierarchy
+        val iosMain by creating {
+            dependsOn(commonMain.get())
         }
+        val iosArm64Main by getting { dependsOn(iosMain) }
+        val iosX64Main by getting { dependsOn(iosMain) }
+        val iosSimulatorArm64Main by getting { dependsOn(iosMain) }
 
         jvmMain {
             dependencies {
                 // Uses java.awt.Desktop - no additional dependencies
             }
         }
+
+        // macOS uses StoreKit and NSWorkspace
+        val macosMain by creating {
+            dependsOn(commonMain.get())
+        }
+        val macosArm64Main by getting { dependsOn(macosMain) }
+        val macosX64Main by getting { dependsOn(macosMain) }
     }
 }
 
