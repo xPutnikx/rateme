@@ -6,6 +6,14 @@ import kotlinx.coroutines.tasks.await
 
 /**
  * Android implementation of ReviewService using Google Play In-App Review API.
+ *
+ * IMPORTANT: This API has limitations:
+ * - Must use a personal @gmail.com account (GSuite/enterprise accounts don't work)
+ * - User must have downloaded the app from Play Store at least once
+ * - If user already reviewed, the dialog won't show (need to delete review first)
+ * - Sometimes need to clear Play Store cache/data
+ * - The API is fire-and-forget - it reports success even when dialog doesn't show
+ * - Limited to ~3 prompts per year per user
  */
 class AndroidReviewService : ReviewService {
 
